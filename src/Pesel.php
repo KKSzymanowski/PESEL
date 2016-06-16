@@ -8,11 +8,10 @@ use Pesel\Traits\GenderValidation;
 
 class Pesel implements PeselInterface
 {
-
     use BasicValidation;
     use GenderValidation;
     use BirthDateValidation;
-    
+
     protected $number;
 
     /**
@@ -34,5 +33,4 @@ class Pesel implements PeselInterface
     {
         return new static($number);
     }
-
 }

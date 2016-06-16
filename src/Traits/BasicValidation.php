@@ -20,14 +20,17 @@ trait BasicValidation
      */
     public function isValid()
     {
-        if (! $this->hasValidLength())
+        if (! $this->hasValidLength()) {
             return false;
+        }
 
-        if (! $this->containsOnlyDigits())
+        if (! $this->containsOnlyDigits()) {
             return false;
+        }
 
-        if (! $this->hasValidChecksum())
+        if (! $this->hasValidChecksum()) {
             return false;
+        }
 
         return true;
     }

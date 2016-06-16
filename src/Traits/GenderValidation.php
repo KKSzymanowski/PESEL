@@ -7,7 +7,7 @@ use InvalidArgumentException;
 trait GenderValidation
 {
     /**
-     * All possible gender definitions
+     * All possible gender definitions.
      *
      * @var array
      */
@@ -28,7 +28,7 @@ trait GenderValidation
 
     /**
      * Check if gender encoded in PESEL
-     * number matches provided gender
+     * number matches provided gender.
      *
      * @param $gender
      * @return bool
@@ -43,7 +43,7 @@ trait GenderValidation
     protected function normalizeGender($gender)
     {
         if (! array_key_exists($gender, static::$genders)) {
-            throw new InvalidArgumentException("Invalid gender: " . $gender);
+            throw new InvalidArgumentException('Invalid gender: '.$gender);
         }
 
         return static::$genders[$gender];
