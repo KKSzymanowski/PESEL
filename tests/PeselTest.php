@@ -10,12 +10,16 @@ class PeselTest extends PHPUnit_Framework_TestCase
     {
         $this->assertFalse(Pesel::create("1234")->hasValidLength());
 
+        $this->assertFalse(Pesel::create("1234")->isValid());
+
         $this->assertTrue(Pesel::create("12341234123")->hasValidLength());
     }
 
     public function testOnlyDigitValidation()
     {
         $this->assertFalse(Pesel::create("1234a1234")->containsOnlyDigits());
+
+        $this->assertFalse(Pesel::create("1234123412a")->isValid());
 
         $this->assertTrue(Pesel::create("12341234")->containsOnlyDigits());
     }
