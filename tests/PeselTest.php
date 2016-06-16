@@ -45,7 +45,7 @@ class PeselTest extends PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownWhenInvalidGenderIsProvided()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->setExpectedException('InvalidArgumentException');
 
         foreach (['0', '1', 0, 1, 'A', 'b', 'c', 'd'] as $gender) {
             Pesel::create("00000000000")->hasGender($gender);
