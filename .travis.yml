@@ -15,4 +15,8 @@ before_install:
 install:
   - composer update
 
-script: vendor/bin/phpunit
+script:
+  - ./vendor/bin/phpunit --coverage-clover ./tests/logs/clover.xml
+
+after_script:
+  - php vendor/bin/coveralls -v
