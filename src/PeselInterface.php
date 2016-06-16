@@ -16,35 +16,6 @@ interface PeselInterface
     const GENDER_MALE = 1;
 
     const PESEL_LENGTH = 11;
-
-    /**
-     * All possible gender definitions
-     *
-     * @var array
-     */
-    const GENDERS = [
-        'K' => self::GENDER_FEMALE,
-        'k' => self::GENDER_FEMALE,
-        'W' => self::GENDER_FEMALE,
-        'w' => self::GENDER_FEMALE,
-        'F' => self::GENDER_FEMALE,
-        'f' => self::GENDER_FEMALE,
-
-        'M' => self::GENDER_MALE,
-        'm' => self::GENDER_MALE,
-
-        self::GENDER_FEMALE => self::GENDER_FEMALE,
-        self::GENDER_MALE => self::GENDER_MALE,
-    ];
-
-    /**
-     * Weights assigned to each digit.
-     *
-     * Used when calculating checksum.
-     *
-     * @var array
-     */
-    const WEIGHTS = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1];
     
     /**
      * Check if PESEL number is valid.

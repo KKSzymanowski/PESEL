@@ -5,6 +5,15 @@ namespace Pesel\Traits;
 trait BasicValidation
 {
     /**
+     * Weights assigned to each digit.
+     *
+     * Used when calculating checksum.
+     *
+     * @var array
+     */
+    protected static $weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1];
+
+    /**
      * Check if PESEL number is valid.
      *
      * @return bool
@@ -47,7 +56,7 @@ trait BasicValidation
         $digitArray = str_split($this->number);
 
         $checksum = array_reduce(array_keys($digitArray), function ($carry, $index) use ($digitArray) {
-            return $carry + static::WEIGHTS[$index] * $digitArray[$index];
+            return $carry + static::$weights[$index] * $digitArray[$index];
         });
 
         return $checksum % 10 == 0;
