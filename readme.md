@@ -1,6 +1,6 @@
 ## PESEL
 [![Build Status](https://travis-ci.org/KKSzymanowski/PESEL.svg?branch=master)](https://travis-ci.org/KKSzymanowski/PESEL)
-[![Coverage Status](https://coveralls.io/repos/kkszymanowski/pesel/badge.svg?branch=master&service=github)](https://coveralls.io/github/kkszymanowski/pesel?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/KKSzymanowski/PESEL/badge.svg?branch=master)](https://coveralls.io/github/KKSzymanowski/PESEL?branch=master)
 [![StyleCI](https://styleci.io/repos/61304979/shield)](https://styleci.io/repos/61304979)
 [![Latest Stable Version](https://poser.pugx.org/kkszymanowski/pesel/v/stable)](https://packagist.org/packages/kkszymanowski/pesel)
 [![License](https://poser.pugx.org/kkszymanowski/pesel/license)](https://packagist.org/packages/kkszymanowski/pesel)
