@@ -7,7 +7,7 @@ use Carbon\Carbon;
 interface PeselInterface
 {
     /**
-     * Which digit in PESEL number contains gender
+     * Which digit in PESEL number contains gender.
      */
     const GENDER_DIGIT = 9;
 
@@ -16,7 +16,7 @@ interface PeselInterface
     const GENDER_MALE = 1;
 
     const PESEL_LENGTH = 11;
-    
+
     /**
      * Check if PESEL number is valid.
      *
@@ -26,7 +26,7 @@ interface PeselInterface
 
     /**
      * Check if the birth date encoded in PESEL number
-     * is the same as provided
+     * is the same as provided.
      *
      * @param Carbon $dateOfBirth
      * @return bool
@@ -34,7 +34,7 @@ interface PeselInterface
     public function hasDateOfBirth(Carbon $dateOfBirth);
 
     /**
-     * Alias for hasDateOfBirth
+     * Alias for hasDateOfBirth.
      *
      * @param Carbon $birthDate
      * @return bool
@@ -43,7 +43,7 @@ interface PeselInterface
 
     /**
      * Check if gender encoded in PESEL
-     * number matches provided gender
+     * number matches provided gender.
      *
      * @param $gender
      * @return bool

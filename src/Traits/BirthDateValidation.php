@@ -6,10 +6,9 @@ use Carbon\Carbon;
 
 trait BirthDateValidation
 {
-
     /**
      * Check if the birth date encoded in PESEL number
-     * is the same as provided
+     * is the same as provided.
      *
      *
      * @param Carbon $birthDate
@@ -21,7 +20,7 @@ trait BirthDateValidation
     }
 
     /**
-     * Alias for hasDateOfBirth
+     * Alias for hasDateOfBirth.
      *
      * @param Carbon $dateOfBirth
      * @return bool
@@ -48,7 +47,7 @@ trait BirthDateValidation
         // 19,19,20,20,21,21,22,22,18,18
         $century += 18;
 
-        $year = $century . $year;
+        $year = $century.$year;
 
         $month = str_pad($month % 20, 2, '0', STR_PAD_LEFT);
 
