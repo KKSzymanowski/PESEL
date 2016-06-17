@@ -3,7 +3,7 @@
 use Pesel\Pesel;
 use Pesel\PeselValidator;
 
-class PeselValidatorTest extends PHPUnit_Framework_TestCase
+class PeselValidationTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -14,20 +14,15 @@ class PeselValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testHasBirthDateReturnsCorrectValue(Pesel $pesel, $birthDate, $isCorrect)
     {
-        $actual = PeselValidator::hasBirthDate($pesel, DateTime::createFromFormat('Y-m-d', $birthDate));
+        $actual = $pesel->hasBirthDate(DateTime::createFromFormat('Y-m-d', $birthDate));
+
+        $actualStr = $actual ? 'true' : 'false';
+        $isCorrectStr = $isCorrect ? 'true' : 'false';
 
         $this->assertEquals(
             $isCorrect,
             $actual,
-            "Invalid gender. Got $actual, expected $isCorrect for number $pesel"
-        );
-
-        $actual = PeselValidator::hasDateOfBirth($pesel, DateTime::createFromFormat('Y-m-d', $birthDate));
-
-        $this->assertEquals(
-            $isCorrect,
-            $actual,
-            "Invalid gender. Got $actual, expected $isCorrect for number $pesel and birth date $birthDate"
+            "Invalid gender. Got $actualStr, expected $isCorrectStr for number $pesel"
         );
     }
 
@@ -39,15 +34,15 @@ class PeselValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testHasGenderReturnsCorrectValue(Pesel $pesel, $gender, $isCorrect)
     {
-        $actual = PeselValidator::hasGender($pesel, $gender);
+        $actual = $pesel->hasGender($gender);
 
-        $a = $actual ? 'true' : 'false';
-        $b = $isCorrect ? 'true' : 'false';
+        $actualStr = $actual ? 'true' : 'false';
+        $isCorrectStr = $isCorrect ? 'true' : 'false';
 
         $this->assertEquals(
             $isCorrect,
             $actual,
-            "Invalid gender. Got {$a}, expected {$b} for number $pesel and gender $gender"
+            "Invalid gender. Got $actualStr, expected $isCorrectStr for number $pesel and gender $gender"
         );
     }
 
@@ -64,7 +59,7 @@ class PeselValidatorTest extends PHPUnit_Framework_TestCase
             $this->setExpectedException('InvalidArgumentException', 'Podano płeć w niepoprawnym formacie');
         }
 
-        PeselValidator::hasGender($pesel, $gender);
+        $pesel->hasGender($gender);
     }
 
     public function birthDateDataProvider()

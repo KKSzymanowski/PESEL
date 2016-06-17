@@ -45,10 +45,11 @@ class Pesel
     protected static $weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1];
 
     /**
-     * Pesel constructor.
+     * Throws InvalidArgumentException when PESEL number is invalid.
      *
      * @param string $number
      * @param array $errorMessages
+     * @throws InvalidArgumentException
      */
     public function __construct($number, $errorMessages = [])
     {
@@ -66,8 +67,11 @@ class Pesel
     /**
      * A glorified constructor.
      *
+     * Throws InvalidArgumentException when PESEL number is invalid.
+     *
      * @param string $number
      * @return static
+     * @throws InvalidArgumentException
      */
     public static function create($number)
     {
@@ -83,7 +87,7 @@ class Pesel
     public static function isValid($number)
     {
         try {
-            new self($number);
+            new static($number);
 
             return true;
         } catch (InvalidArgumentException $e) {
@@ -92,8 +96,6 @@ class Pesel
     }
 
     /**
-     * Number getter.
-     *
      * @return string
      */
     public function getNumber()
@@ -131,6 +133,17 @@ class Pesel
     }
 
     /**
+     * Check if PESEL number contains provided birth date.
+     *
+     * @param DateTime $birthDate
+     * @return bool
+     */
+    public function hasBirthDate(DateTime $birthDate)
+    {
+        return $this->getBirthDate() == $birthDate;
+    }
+
+    /**
      * Get gender encoded in the number.
      *
      * @return int
@@ -138,6 +151,20 @@ class Pesel
     public function getGender()
     {
         return $this->number[static::$genderDigit] % 2;
+    }
+
+    /**
+     * Check if PESEL number contains provided gender.
+     *
+     * @param int $gender Pesel::GENDER_FEMALE or Pesel::GENDER_MALE
+     * @return bool
+     * @throws InvalidArgumentException
+     */
+    public function hasGender($gender)
+    {
+        static::validateGenderInput($gender);
+
+        return $this->getGender() == $gender;
     }
 
     /**
@@ -150,20 +177,29 @@ class Pesel
         return $this->number;
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     protected function validateLength()
     {
-        if (strlen($this->number) != self::$peselLength) {
+        if (strlen($this->number) !== self::$peselLength) {
             throw new InvalidArgumentException($this->errorMessages['invalidLength']);
         }
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     protected function validateDigitsOnly()
     {
-        if (ctype_digit($this->number) == false) {
+        if (ctype_digit($this->number) === false) {
             throw new InvalidArgumentException($this->errorMessages['invalidCharacters']);
         }
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     protected function validateChecksum()
     {
         $digitArray = str_split($this->number);
@@ -172,8 +208,25 @@ class Pesel
             return $carry + static::$weights[$index] * $digitArray[$index];
         });
 
-        if ($checksum % 10 != 0) {
+        if ($checksum % 10 !== 0) {
             throw new InvalidArgumentException($this->errorMessages['invalidChecksum']);
+        }
+    }
+
+    /**
+     * Check if provided gender matches accepted format.
+     *
+     * @param int $gender
+     * @throws InvalidArgumentException
+     */
+    protected static function validateGenderInput($gender)
+    {
+        if ($gender !== Pesel::GENDER_FEMALE &&
+            $gender !== Pesel::GENDER_MALE &&
+            $gender !== (string) Pesel::GENDER_FEMALE &&
+            $gender !== (string) Pesel::GENDER_MALE
+        ) {
+            throw new InvalidArgumentException('Podano płeć w niepoprawnym formacie');
         }
     }
 }

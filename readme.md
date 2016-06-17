@@ -65,8 +65,6 @@ $pesel = new Pesel($number);
 $pesel->getNumber();    // Zwraca string
 
 $pesel->getBirthDate(); // Zwraca DateTime
-// lub, jeśli wygodniej
-$pesel->getDateOfBirth();
 
 $pesel->getGender();    // Zwraca Pesel::GENDER_MALE lub Pesel::GENDER_FEMALE
 ```
