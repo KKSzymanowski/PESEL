@@ -1,118 +1,207 @@
 <?php
 
-use Carbon\Carbon;
 use Pesel\Pesel;
 
 class PeselTest extends PHPUnit_Framework_TestCase
 {
 
-    public function testLengthValidation()
-    {
-        $this->assertFalse(Pesel::create("1234")->hasValidLength());
-
-        $this->assertFalse(Pesel::create("1234")->isValid());
-
-        $this->assertTrue(Pesel::create("12341234123")->hasValidLength());
-    }
-
-    public function testOnlyDigitValidation()
-    {
-        $this->assertFalse(Pesel::create("1234a1234")->containsOnlyDigits());
-
-        $this->assertFalse(Pesel::create("1234123412a")->isValid());
-
-        $this->assertTrue(Pesel::create("12341234")->containsOnlyDigits());
-    }
-
-    public function testChecksumValidation()
-    {
-        $pesels = [
-            '95100612532' => true,
-            '96100612532' => false,
-            '60122500187' => true,
-            '61122500187' => false,
-            '77091501150' => true,
-            '78091501150' => false,
-        ];
-
-        foreach ($pesels as $pesel => $valid) {
-            $pesel = Pesel::create($pesel);
-            $this->assertTrue($pesel->hasValidLength());
-
-            $this->assertTrue($pesel->containsOnlyDigits());
-
-            $this->assertEquals($valid, $pesel->hasValidChecksum());
-
-            $this->assertEquals($valid, $pesel->isValid());
-        }
-    }
-
-    public function testExceptionIsThrownWhenInvalidGenderIsProvided()
+    /**
+     * @dataProvider invalidNumberDataProvider
+     * @param string $number
+     */
+    public function testExceptionIsThrownWhenNumberIsInvalid($number)
     {
         $this->setExpectedException('InvalidArgumentException');
 
-        foreach (['0', '1', 0, 1, 'A', 'b', 'c', 'd'] as $gender) {
-            Pesel::create("00000000000")->hasGender($gender);
-        }
+        Pesel::create($number);
     }
 
-    public function testExceptionIsNotThrownWhenValidGenderIsProvided()
+    /**
+     * @dataProvider invalidNumberDataProvider
+     * @param string $number
+     */
+    public function testIsValidReturnsFalseWhenNumberIsInvalid($number)
+    {
+        $actual = Pesel::isValid($number);
+
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * @dataProvider validNumberDataProvider
+     * @param string $number
+     * @param string $birthDate
+     * @param int $gender
+     */
+    public function testNoExceptionIsThrownWhenNumberIsValid($number, $birthDate, $gender)
     {
         try {
-            foreach (['M', 'm', 'K', 'k', 'W', 'w', 'F', 'f', 0, 1] as $gender) {
-                Pesel::create("00000000000")->hasGender($gender);
-            }
+            Pesel::create($number);
         } catch (InvalidArgumentException $e) {
-            $this->fail("Unexpected exception " . $e->getMessage() . " was thrown");
+            $this->fail("Unexpected InvalidArgumentException: {$e->getMessage()}");
         }
     }
 
-    public function testGenderValidation()
+    /**
+     * @dataProvider validNumberDataProvider
+     * @param string $number
+     * @param string $birthDate
+     * @param int $gender
+     */
+    public function testIsValidReturnsTrueWhenNumberIsValid($number, $birthDate, $gender)
     {
-        for ($i = 0; $i < 10; ++$i) {
-            foreach (['m', 'M', 1, Pesel::GENDER_MALE] as $gender) {
-                $this->assertEquals($i % 2 == 1, Pesel::create("000000000${i}0")->hasGender($gender));
-            }
-            foreach (['K', 'k', 'W', 'w', 'F', 'f', 0, Pesel::GENDER_FEMALE] as $gender) {
-                $this->assertEquals($i % 2 == 0, Pesel::create("000000000${i}0")->hasGender($gender));
-            }
-        }
+        $actual = Pesel::isValid($number);
+
+        $this->assertTrue($actual);
     }
 
-    public function testBirthDateValidation()
+    /**
+     * @dataProvider validNumberDataProvider
+     * @param string $number
+     * @param string $birthDate
+     * @param int $gender
+     */
+    public function testGetBirthDateReturnsCorrectDate($number, $birthDate, $gender)
     {
-        $dates = [
-            '008101' => Carbon::createFromFormat('Y-m-d', '1800-01-01'),
-            '509101' => Carbon::createFromFormat('Y-m-d', '1850-11-01'),
-            '000101' => Carbon::createFromFormat('Y-m-d', '1900-01-01'),
-            '501101' => Carbon::createFromFormat('Y-m-d', '1950-11-01'),
-            '002101' => Carbon::createFromFormat('Y-m-d', '2000-01-01'),
-            '503101' => Carbon::createFromFormat('Y-m-d', '2050-11-01'),
-            '004101' => Carbon::createFromFormat('Y-m-d', '2100-01-01'),
-            '505101' => Carbon::createFromFormat('Y-m-d', '2150-11-01'),
-            '006101' => Carbon::createFromFormat('Y-m-d', '2200-01-01'),
-            '507101' => Carbon::createFromFormat('Y-m-d', '2250-11-01'),
+        $pesel = Pesel::create($number);
+
+        $actual = $pesel->getBirthDate()->format('Y-m-d');
+
+        $this->assertEquals(
+            $birthDate,
+            $actual,
+            "Invalid birth date. Got $actual, expected $birthDate for number $number"
+        );
+    }
+
+    /**
+     * @dataProvider validNumberDataProvider
+     * @param string $number
+     * @param string $birthDate
+     * @param int $gender
+     */
+    public function testGetGenderReturnsCorrectGender($number, $birthDate, $gender)
+    {
+        $pesel = Pesel::create($number);
+
+        $actual = $pesel->getGender();
+
+        $this->assertEquals(
+            $gender,
+            $actual,
+            "Invalid gender. Got $actual, expected $gender for number $number"
+        );
+    }
+
+    /**
+     * @dataProvider validNumberDataProvider
+     * @param string $number
+     * @param string $birthDate
+     * @param int $gender
+     */
+    public function testGetNumberReturnsCorrectNumber($number, $birthDate, $gender)
+    {
+        $pesel = Pesel::create($number);
+
+        $actual = $pesel->getNumber();
+
+        $this->assertEquals(
+            $number,
+            $actual,
+            "Invalid gender. Got $actual, expected $number for number $number"
+        );
+    }
+
+    /**
+     * @dataProvider validNumberDataProvider
+     * @param string $number
+     * @param string $birthDate
+     * @param int $gender
+     */
+    public function testToStringReturnsCorrectNumber($number, $birthDate, $gender)
+    {
+        $pesel = Pesel::create($number);
+
+        $actual = (string)$pesel;
+
+        $this->assertEquals(
+            $number,
+            $actual,
+            "Invalid gender. Got $actual, expected $number for number $number"
+        );
+    }
+
+    public function testCustomInvalidLengthMessage()
+    {
+        $errorMessages = [
+            'invalidLength' => 'invalidLength',
         ];
 
-        foreach (array_keys($dates) as $actual) {
-            foreach ($dates as $different => $date) {
-                $this->assertEquals(
-                    $actual == $different,
-                    Pesel::create($actual . '00000')->hasBirthDate($date)
-                );
+        $this->setExpectedException('InvalidArgumentException', $errorMessages['invalidLength']);
 
-                $this->assertEquals(
-                    $actual == $different,
-                    Pesel::create($actual . '00000')->hasDateOfBirth($date)
-                );
-            }
-
-        }
-
+        new Pesel('1234', $errorMessages);
     }
 
-    public function testBasicValidation()
+    public function testCustomInvalidCharactersMessage()
     {
+        $errorMessages = [
+            'invalidCharacters' => 'invalidCharacters',
+        ];
 
+        $this->setExpectedException('InvalidArgumentException', $errorMessages['invalidCharacters']);
+
+        new Pesel('aaaabbbbccc', $errorMessages);
     }
+
+    public function testCustomInvalidChecksumMessage()
+    {
+        $errorMessages = [
+            'invalidChecksum' => 'invalidChecksum',
+        ];
+
+        $this->setExpectedException('InvalidArgumentException', $errorMessages['invalidChecksum']);
+
+        new Pesel('11111111111', $errorMessages);
+    }
+
+    public function invalidNumberDataProvider()
+    {
+        return [
+            [1234],
+            ['1234'],
+            ['aaaa'],
+            ['11111111111'],
+            ['aaaaaaaaaaa'],
+            ['96100612532'],
+            ['61122500187'],
+            ['78091501150'],
+        ];
+    }
+
+    public function validNumberDataProvider()
+    {
+        return [
+            ['83082317338', '1983-08-23', Pesel::GENDER_MALE],
+            ['83082317338', '1983-08-23', Pesel::GENDER_MALE],
+            ['62022216858', '1962-02-22', Pesel::GENDER_MALE],
+            ['80052117613', '1980-05-21', Pesel::GENDER_MALE],
+            ['40041212350', '1940-04-12', Pesel::GENDER_MALE],
+            ['93080611761', '1993-08-06', Pesel::GENDER_FEMALE],
+            ['08232314148', '2008-03-23', Pesel::GENDER_FEMALE],
+            ['97100911864', '1997-10-09', Pesel::GENDER_FEMALE],
+            ['45021009506', '1945-02-10', Pesel::GENDER_FEMALE],
+            ['50011703922', '1950-01-17', Pesel::GENDER_FEMALE],
+            ['00810100002', '1800-01-01', Pesel::GENDER_FEMALE],
+            ['50910100000', '1850-11-01', Pesel::GENDER_FEMALE],
+            ['00010100008', '1900-01-01', Pesel::GENDER_FEMALE],
+            ['50110100006', '1950-11-01', Pesel::GENDER_FEMALE],
+            ['00210100004', '2000-01-01', Pesel::GENDER_FEMALE],
+            ['50310100002', '2050-11-01', Pesel::GENDER_FEMALE],
+            ['00410100000', '2100-01-01', Pesel::GENDER_FEMALE],
+            ['50510100008', '2150-11-01', Pesel::GENDER_FEMALE],
+            ['00610100006', '2200-01-01', Pesel::GENDER_FEMALE],
+            ['50710100004', '2250-11-01', Pesel::GENDER_FEMALE],
+        ];
+    }
+
 }

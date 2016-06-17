@@ -23,26 +23,68 @@ lub
 ```php
 $pesel = Pesel::create($number);
 ```
-Powyższe metody są równoważne.
+**Powyższe metody są równoważne.**
 
+Podczas tworzenia obiektu sprawdzana jest poprawność numeru PESEL.
+- Powinien mieć 11 znaków
+- Powinien zawierać wyłącznie cyfry
+- Suma kontrolna powinna być poprawna.
+
+Jeżeli przynajmniej jeden z tych warunków nie zostanie spełniony, zostanie rzucony wyjątek typu `InvalidArgumentException` z domyślną treścią. Treść wyjątku można nadpisać następująco:
+```php
+Pesel::create($number, [
+    'invalidLength'     => 'Tekst 1',
+    'invalidCharacters' => 'Tekst 2',
+    'invalidChecksum'   => 'Tekst 3
+]);
+```
+Pozwala to na elastyczne przekazanie treści do użytkownika:
+```php
+try {
+    Pesel::create($number, [
+       'invalidLength'     => 'Tekst 1',
+       'invalidCharacters' => 'Tekst 2',
+       'invalidChecksum'   => 'Tekst 3
+    ]);
+
+    echo("Numer PESEL jest poprawny");
+} catch(InvalidArgumentException $e) {
+   echo($e->getMessage());
+}
+```
+Brak któregokolwiek z wymienionych pól skutkuje rzuceniem wyjątku z domyślną treścią:
+```php
+'invalidLength'     => 'Nieprawidłowa długość numeru PESEL.',
+'invalidCharacters' => 'Numer PESEL może zawierać tylko cyfry.',
+'invalidChecksum'   => 'Numer PESEL posiada niepoprawną sumę kontrolną.'
+```
+##### Pobieranie zawartości numeru PESEL:
+```php
+$pesel = new Pesel($number);
+
+$pesel->getNumber();    // Zwraca string
+
+$pesel->getBirthDate(); // Zwraca DateTime
+// lub, jeśli wygodniej
+$pesel->getDateOfBirth();
+
+$pesel->getGender();    // Zwraca Pesel::GENDER_MALE lub Pesel::GENDER_FEMALE
+```
 ##### Sprawdzenie poprawności:
 ```php
-Pesel::create($pesel)->isValid();
+Pesel::isValid($pesel);
 ```
 
 ##### Sprawdzenie daty urodzenia:
 
-Parametr `$birthDate` jest instancją klasy [Carbon](https://github.com/briannesbitt/Carbon)
+Parametr `$birthDate` jest instancją wbudowanej klasy DateTime
 ```php
-Pesel::create($pesel)->hasBirthDate($birthDate);
+PeselValidator::hasBirthDate(Pesel::create($pesel), $birthDate);
 ```
 
 ##### Sprawdzenie płci
 ```php
-Pesel::create($pesel)->hasGender(Pesel::GENDER_MALE);
+PeselValidator::hasGender(Pesel::create($pesel), Pesel::GENDER_MALE);
 
-Pesel::create($pesel)->hasGender(Pesel::GENDER_FEMALE);
+PeselValidator::hasGender(Pesel::create($pesel), Pesel::GENDER_FEMALE);
 ```
-Akceptowane formaty płci:
-- Męska: `Pesel::GENDER_MALE`, `1`, `'M'`, `'m'`
-- Żeńska: `Pesel::GENDER_FEMALE`, `0`, `'F'`, `'f'`, `'K'`, `'k'`, `'W'`, `'w'`
