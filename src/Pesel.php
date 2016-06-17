@@ -45,11 +45,9 @@ class Pesel
     protected static $weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1];
 
     /**
-     * Throws InvalidArgumentException when PESEL number is invalid.
-     *
      * @param string $number
      * @param array $errorMessages
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException when PESEL number is invalid.
      */
     public function __construct($number, $errorMessages = [])
     {
@@ -67,11 +65,9 @@ class Pesel
     /**
      * A glorified constructor.
      *
-     * Throws InvalidArgumentException when PESEL number is invalid.
-     *
      * @param string $number
      * @return static
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException when PESEL number is invalid.
      */
     public static function create($number)
     {
@@ -158,7 +154,7 @@ class Pesel
      *
      * @param int $gender Pesel::GENDER_FEMALE or Pesel::GENDER_MALE
      * @return bool
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException when provided gender is neither Pesel::GENDER_FEMALE nor PESEL::GENDER_MALE
      */
     public function hasGender($gender)
     {
@@ -178,7 +174,7 @@ class Pesel
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException when number has invalid length
      */
     protected function validateLength()
     {
@@ -188,7 +184,7 @@ class Pesel
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException when number contains non-digits
      */
     protected function validateDigitsOnly()
     {
@@ -198,7 +194,7 @@ class Pesel
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException on invalid checksum
      */
     protected function validateChecksum()
     {
@@ -216,15 +212,15 @@ class Pesel
     /**
      * Check if provided gender matches accepted format.
      *
-     * @param int $gender
-     * @throws InvalidArgumentException
+     * @param int $gender Pesel::GENDER_FEMALE or Pesel::GENDER_MALE
+     * @throws InvalidArgumentException when provided gender is not Pesel::GENDER_FEMALE nor PESEL::GENDER_MALE
      */
     protected static function validateGenderInput($gender)
     {
-        if ($gender !== self::GENDER_FEMALE &&
-            $gender !== self::GENDER_MALE &&
-            $gender !== (string) self::GENDER_FEMALE &&
-            $gender !== (string) self::GENDER_MALE
+        if ($gender !== static::GENDER_FEMALE &&
+            $gender !== static::GENDER_MALE &&
+            $gender !== (string) Pesel::GENDER_FEMALE &&
+            $gender !== (string) Pesel::GENDER_MALE
         ) {
             throw new InvalidArgumentException('Podano płeć w niepoprawnym formacie');
         }
