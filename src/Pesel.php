@@ -221,10 +221,10 @@ class Pesel
      */
     protected static function validateGenderInput($gender)
     {
-        if ($gender !== Pesel::GENDER_FEMALE &&
-            $gender !== Pesel::GENDER_MALE &&
-            $gender !== (string) Pesel::GENDER_FEMALE &&
-            $gender !== (string) Pesel::GENDER_MALE
+        if ($gender !== self::GENDER_FEMALE &&
+            $gender !== self::GENDER_MALE &&
+            $gender !== (string) self::GENDER_FEMALE &&
+            $gender !== (string) self::GENDER_MALE
         ) {
             throw new InvalidArgumentException('Podano płeć w niepoprawnym formacie');
         }
