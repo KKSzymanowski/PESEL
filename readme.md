@@ -49,7 +49,7 @@ try {
 
     echo("Numer PESEL jest poprawny");
 } catch(InvalidArgumentException $e) {
-   echo($e->getMessage());
+    echo($e->getMessage());
 }
 ```
 Brak któregokolwiek z wymienionych pól skutkuje rzuceniem wyjątku z domyślną treścią:
@@ -77,7 +77,7 @@ Pesel::isValid($pesel);
 
 ##### Sprawdzenie daty urodzenia:
 
-Parametr `$birthDate` jest instancją wbudowanej klasy DateTime
+Parametr `$birthDate` jest instancją wbudowanej w PHP klasy DateTime
 ```php
 PeselValidator::hasBirthDate(Pesel::create($pesel), $birthDate);
 ```

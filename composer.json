@@ -1,7 +1,7 @@
 {
     "name": "kkszymanowski/pesel",
     "description": "Sprawdzanie poprawności numeru PESEL",
-    "keywords": ["PESEL", "Poprawność"],
+    "keywords": ["PESEL", "poprawność", "numeru"],
     "license": "MIT",
     "authors": [
         {
