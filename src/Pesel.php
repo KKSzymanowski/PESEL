@@ -219,8 +219,8 @@ class Pesel
     {
         if ($gender !== static::GENDER_FEMALE &&
             $gender !== static::GENDER_MALE &&
-            $gender !== (string) Pesel::GENDER_FEMALE &&
-            $gender !== (string) Pesel::GENDER_MALE
+            $gender !== (string) self::GENDER_FEMALE &&
+            $gender !== (string) self::GENDER_MALE
         ) {
             throw new InvalidArgumentException('Podano płeć w niepoprawnym formacie');
         }
