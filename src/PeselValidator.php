@@ -7,7 +7,6 @@ use InvalidArgumentException;
 
 class PeselValidator
 {
-
     /**
      * Check if PESEL number contains provided birth date.
      *
@@ -60,8 +59,8 @@ class PeselValidator
     {
         if ($gender !== Pesel::GENDER_FEMALE &&
             $gender !== Pesel::GENDER_MALE &&
-            $gender !== (string)Pesel::GENDER_FEMALE &&
-            $gender !== (string)Pesel::GENDER_MALE
+            $gender !== (string) Pesel::GENDER_FEMALE &&
+            $gender !== (string) Pesel::GENDER_MALE
         ) {
             throw new InvalidArgumentException('Podano płeć w niepoprawnym formacie');
         }
