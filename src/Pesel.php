@@ -7,7 +7,6 @@ use InvalidArgumentException;
 
 class Pesel
 {
-
     const GENDER_FEMALE = 0;
 
     const GENDER_MALE = 1;
@@ -23,7 +22,7 @@ class Pesel
     protected $errorMessages = [
         'invalidLength' => 'Nieprawidłowa długość numeru PESEL.',
         'invalidCharacters' => 'Numer PESEL może zawierać tylko cyfry.',
-        'invalidChecksum' => 'Numer PESEL posiada niepoprawną sumę kontrolną.'
+        'invalidChecksum' => 'Numer PESEL posiada niepoprawną sumę kontrolną.',
     ];
 
     /**
@@ -84,7 +83,7 @@ class Pesel
     public static function isValid($number)
     {
         try {
-            new Pesel($number);
+            new self($number);
 
             return true;
         } catch (InvalidArgumentException $e) {
@@ -124,11 +123,11 @@ class Pesel
         // 19,19,20,20,21,21,22,22,18,18
         $century += 18;
 
-        $year = $century . $year;
+        $year = $century.$year;
 
         $month = str_pad($month % 20, 2, '0', STR_PAD_LEFT);
 
-        return DateTime::createFromFormat("Y-m-d", "$year-$month-$day");
+        return DateTime::createFromFormat('Y-m-d', "$year-$month-$day");
     }
 
     /**
@@ -142,7 +141,7 @@ class Pesel
     }
 
     /**
-     * String representation
+     * String representation.
      *
      * @return string
      */
@@ -173,7 +172,8 @@ class Pesel
             return $carry + static::$weights[$index] * $digitArray[$index];
         });
 
-        if ($checksum % 10 != 0)
+        if ($checksum % 10 != 0) {
             throw new InvalidArgumentException($this->errorMessages['invalidChecksum']);
+        }
     }
 }
