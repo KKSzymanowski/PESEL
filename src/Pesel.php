@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * KKSzymanowski/PESEL
+ * Walidacja numeru PESEL
+ *
+ * @package KKSzymanowski/PESEL
+ * @author Kuba Szymanowski <kuba.szymanowski@inf24.pl>
+ * @link https://github.com/kkszymanowski/pesel
+ * @license MIT
+ */
+
 namespace Pesel;
 
 use DateTime;
