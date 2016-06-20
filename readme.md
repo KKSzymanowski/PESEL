@@ -35,7 +35,7 @@ Jeżeli przynajmniej jeden z tych warunków nie zostanie spełniony, zostanie rz
 Pesel::create($number, [
     'invalidLength'     => 'Tekst 1',
     'invalidCharacters' => 'Tekst 2',
-    'invalidChecksum'   => 'Tekst 3
+    'invalidChecksum'   => 'Tekst 3'
 ]);
 ```
 Pozwala to na elastyczne przekazanie treści do użytkownika:
@@ -44,7 +44,7 @@ try {
     Pesel::create($number, [
        'invalidLength'     => 'Tekst 1',
        'invalidCharacters' => 'Tekst 2',
-       'invalidChecksum'   => 'Tekst 3
+       'invalidChecksum'   => 'Tekst 3'
     ]);
 
     echo("Numer PESEL jest poprawny");
@@ -70,7 +70,7 @@ $pesel->getGender();    // Zwraca Pesel::GENDER_MALE lub Pesel::GENDER_FEMALE
 ```
 ##### Sprawdzenie poprawności:
 ```php
-Pesel::isValid($pesel);
+Pesel::isValid($pesel); // Zwraca bool, nie rzuca wyjątku
 ```
 
 ##### Sprawdzenie daty urodzenia:
