@@ -10,6 +10,7 @@ class PeselTest extends TestCase
 {
     /**
      * @dataProvider invalidNumberDataProvider
+     *
      * @param mixed $number
      */
     public function testExceptionIsThrownWhenNumberIsInvalid($number)
@@ -21,6 +22,7 @@ class PeselTest extends TestCase
 
     /**
      * @dataProvider invalidNumberDataProvider
+     *
      * @param mixed $number
      */
     public function testIsValidReturnsFalseWhenNumberIsInvalid($number)
@@ -33,6 +35,7 @@ class PeselTest extends TestCase
     /**
      * @dataProvider validNumberDataProvider
      * @doesNotPerformAssertions
+     *
      * @param string $number
      * @param string $birthDate
      * @param int    $gender
@@ -48,6 +51,7 @@ class PeselTest extends TestCase
 
     /**
      * @dataProvider validNumberDataProvider
+     *
      * @param string $number
      * @param string $birthDate
      * @param int    $gender
@@ -61,6 +65,7 @@ class PeselTest extends TestCase
 
     /**
      * @dataProvider validNumberDataProvider
+     *
      * @param string $number
      * @param string $birthDate
      * @param int    $gender
@@ -80,6 +85,7 @@ class PeselTest extends TestCase
 
     /**
      * @dataProvider validNumberDataProvider
+     *
      * @param string $number
      * @param string $birthDate
      * @param int    $gender
@@ -99,6 +105,7 @@ class PeselTest extends TestCase
 
     /**
      * @dataProvider validNumberDataProvider
+     *
      * @param string $number
      * @param string $birthDate
      * @param int    $gender
@@ -118,6 +125,7 @@ class PeselTest extends TestCase
 
     /**
      * @dataProvider validNumberDataProvider
+     *
      * @param string $number
      * @param string $birthDate
      * @param int    $gender
@@ -126,7 +134,7 @@ class PeselTest extends TestCase
     {
         $pesel = Pesel::create($number);
 
-        $actual = (string)$pesel;
+        $actual = (string) $pesel;
 
         $this->assertEquals(
             $number,

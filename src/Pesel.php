@@ -61,6 +61,7 @@ class Pesel
     /**
      * @param string $number
      * @param array  $errorMessages Deprecated, please catch a specific exception extending PeselValidationException
+     *
      * @throws InvalidArgumentException when PESEL number is invalid.
      */
     public function __construct($number, $errorMessages = [])
@@ -80,8 +81,10 @@ class Pesel
      * A glorified constructor.
      *
      * @param string $number
-     * @return static
+     *
      * @throws InvalidArgumentException when PESEL number is invalid.
+     *
+     * @return static
      */
     public static function create($number)
     {
@@ -92,6 +95,7 @@ class Pesel
      * Check if provided number is valid.
      *
      * @param string $number
+     *
      * @return bool
      */
     public static function isValid($number)
@@ -139,7 +143,7 @@ class Pesel
         // 19,19,20,20,21,21,22,22,18,18
         $century += 18;
 
-        $year = $century . $year;
+        $year = $century.$year;
 
         $month = str_pad($month % 20, 2, '0', STR_PAD_LEFT);
 
@@ -150,6 +154,7 @@ class Pesel
      * Check if PESEL number contains provided birth date.
      *
      * @param DateTime $birthDate
+     *
      * @return bool
      */
     public function hasBirthDate(DateTime $birthDate)
@@ -171,8 +176,10 @@ class Pesel
      * Check if PESEL number contains provided gender.
      *
      * @param int $gender Pesel::GENDER_FEMALE or Pesel::GENDER_MALE
-     * @return bool
+     *
      * @throws InvalidArgumentException when provided gender is neither Pesel::GENDER_FEMALE nor PESEL::GENDER_MALE
+     *
+     * @return bool
      */
     public function hasGender($gender)
     {
@@ -231,14 +238,15 @@ class Pesel
      * Check if provided gender matches accepted format.
      *
      * @param int $gender Pesel::GENDER_FEMALE or Pesel::GENDER_MALE
+     *
      * @throws InvalidArgumentException when provided gender is not Pesel::GENDER_FEMALE nor PESEL::GENDER_MALE
      */
     protected static function validateGenderInput($gender)
     {
         if ($gender !== static::GENDER_FEMALE &&
             $gender !== static::GENDER_MALE &&
-            $gender !== (string)self::GENDER_FEMALE &&
-            $gender !== (string)self::GENDER_MALE
+            $gender !== (string) self::GENDER_FEMALE &&
+            $gender !== (string) self::GENDER_MALE
         ) {
             throw new InvalidGenderInputException('Podano płeć w niepoprawnym formacie');
         }
