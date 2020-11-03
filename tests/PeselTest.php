@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
+namespace Pesel\Tests;
+
+use InvalidArgumentException;
 use Pesel\Pesel;
 use PHPUnit\Framework\TestCase;
 
 class PeselTest extends TestCase
 {
-
     /**
      * @dataProvider invalidNumberDataProvider
      */
@@ -54,11 +56,12 @@ class PeselTest extends TestCase
 
     /**
      * @dataProvider validNumberDataProvider
+     *
      * @param string $number
      * @param string $birthDate
-     * @param int $gender
+     * @param int    $gender
      */
-    public function testGetBirthDateReturnsCorrectDate($number, $birthDate, $gender)
+    public function testGetBirthDateReturnsCorrectDate(string $number, string $birthDate, int $gender)
     {
         $pesel = Pesel::create($number);
 
@@ -73,11 +76,12 @@ class PeselTest extends TestCase
 
     /**
      * @dataProvider validNumberDataProvider
+     *
      * @param string $number
      * @param string $birthDate
-     * @param int $gender
+     * @param int    $gender
      */
-    public function testGetGenderReturnsCorrectGender($number, $birthDate, $gender)
+    public function testGetGenderReturnsCorrectGender(string $number, string $birthDate, int $gender)
     {
         $pesel = Pesel::create($number);
 
@@ -92,11 +96,12 @@ class PeselTest extends TestCase
 
     /**
      * @dataProvider validNumberDataProvider
+     *
      * @param string $number
      * @param string $birthDate
-     * @param int $gender
+     * @param int    $gender
      */
-    public function testGetNumberReturnsCorrectNumber($number, $birthDate, $gender)
+    public function testGetNumberReturnsCorrectNumber(string $number, string $birthDate, int $gender)
     {
         $pesel = Pesel::create($number);
 
@@ -116,7 +121,7 @@ class PeselTest extends TestCase
     {
         $pesel = Pesel::create($number);
 
-        $actual = (string)$pesel;
+        $actual = (string) $pesel;
 
         $this->assertEquals(
             $number,
@@ -199,5 +204,4 @@ class PeselTest extends TestCase
             ['50710100004', '2250-11-01', Pesel::GENDER_FEMALE],
         ];
     }
-
 }

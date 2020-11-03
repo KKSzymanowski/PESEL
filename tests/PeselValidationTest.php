@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
+namespace Pesel\Tests;
+
+use DateTime;
+use InvalidArgumentException;
 use Pesel\Pesel;
-use Pesel\PeselValidator;
 use PHPUnit\Framework\TestCase;
 
 class PeselValidationTest extends TestCase
 {
-
     /**
      * @dataProvider birthDateDataProvider
      */
@@ -44,11 +46,11 @@ class PeselValidationTest extends TestCase
     }
 
     /**
-     * @dataProvider genderInputsDataProvider
+     * @dataProvider validGenderInputsDataProvider
      */
     public function testHasGenderThrowsExceptionWhenGenderInputIsInvalid(int $gender, bool $isValid)
     {
-        $pesel = new Pesel("00010100008");
+        $pesel = new Pesel('00010100008');
 
         if ($isValid == false) {
             $this->expectException(InvalidArgumentException::class);
@@ -114,7 +116,7 @@ class PeselValidationTest extends TestCase
         ];
     }
 
-    public function genderInputsDataProvider(): array
+    public function validGenderInputsDataProvider(): array
     {
         return [
             [Pesel::GENDER_MALE, true],
@@ -124,4 +126,4 @@ class PeselValidationTest extends TestCase
             [2, false],
         ];
     }
-}
+    }

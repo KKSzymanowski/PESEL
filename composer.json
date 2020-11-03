@@ -6,7 +6,7 @@
     "authors": [
         {
             "name": "Kuba Szymanowski",
-            "email": "kuba.szymanowski@inf24.pl"
+            "email": "kubaszymanowski@gmail.com"
         }
     ],
     "require": {
@@ -14,11 +14,16 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.3.8",
-        "satooshi/php-coveralls": "1.*"
+        "satooshi/php-coveralls": "2.*"
     },
     "autoload": {
         "psr-4": {
             "Pesel\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pesel\\Tests\\": "tests/"
         }
     }
 }
