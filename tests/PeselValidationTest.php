@@ -11,6 +11,7 @@ class PeselValidationTest extends TestCase
 {
     /**
      * @dataProvider birthDateDataProvider
+     *
      * @param Pesel  $pesel
      * @param string $birthDate
      * @param bool   $isCorrect
@@ -31,6 +32,7 @@ class PeselValidationTest extends TestCase
 
     /**
      * @dataProvider genderDataProvider
+     *
      * @param Pesel $pesel
      * @param int   $gender
      * @param bool  $isCorrect
@@ -52,20 +54,22 @@ class PeselValidationTest extends TestCase
     /**
      * @dataProvider validGenderInputsDataProvider
      * @doesNotPerformAssertions
+     *
      * @param mixed $gender
      */
     public function testHasGenderDoesNotThrowExceptionWhenGenderInputIsValid($gender)
     {
-        (new Pesel("00010100008"))->hasGender($gender);
+        (new Pesel('00010100008'))->hasGender($gender);
     }
 
     /**
      * @dataProvider invalidGenderInputsDataProvider
+     *
      * @param mixed $gender
      */
     public function testHasGenderThrowsExceptionWhenGenderInputIsInvalid($gender)
     {
-        $pesel = new Pesel("00010100008");
+        $pesel = new Pesel('00010100008');
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Podano płeć w niepoprawnym formacie');
