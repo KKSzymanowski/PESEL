@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Pesel;
 
-use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
@@ -63,7 +62,7 @@ final class Pesel
     protected static $weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1];
 
     /**
-     * @param array  $errorMessages Deprecated, please catch a specific exception extending PeselValidationException
+     * @param array $errorMessages Deprecated, please catch a specific exception extending PeselValidationException
      *
      * @throws InvalidArgumentException when PESEL number is invalid.
      */
@@ -164,6 +163,7 @@ final class Pesel
      * Check if PESEL number contains provided gender.
      *
      * @param int $gender Pesel::GENDER_FEMALE or Pesel::GENDER_MALE
+     *
      * @throws InvalidArgumentException when provided gender is neither Pesel::GENDER_FEMALE nor PESEL::GENDER_MALE
      *
      * @return bool

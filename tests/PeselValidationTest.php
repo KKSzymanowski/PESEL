@@ -126,4 +126,4 @@ class PeselValidationTest extends TestCase
             [2, false],
         ];
     }
-    }
+}
