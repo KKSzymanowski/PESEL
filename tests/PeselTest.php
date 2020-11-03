@@ -1,24 +1,27 @@
 <?php
 
+namespace Pesel\Tests;
+
+use InvalidArgumentException;
 use Pesel\Pesel;
+use PHPUnit\Framework\TestCase;
 
-class PeselTest extends PHPUnit_Framework_TestCase
+class PeselTest extends TestCase
 {
-
     /**
      * @dataProvider invalidNumberDataProvider
-     * @param string $number
+     * @param mixed $number
      */
     public function testExceptionIsThrownWhenNumberIsInvalid($number)
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         Pesel::create($number);
     }
 
     /**
      * @dataProvider invalidNumberDataProvider
-     * @param string $number
+     * @param mixed $number
      */
     public function testIsValidReturnsFalseWhenNumberIsInvalid($number)
     {
@@ -29,11 +32,12 @@ class PeselTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider validNumberDataProvider
+     * @doesNotPerformAssertions
      * @param string $number
      * @param string $birthDate
-     * @param int $gender
+     * @param int    $gender
      */
-    public function testNoExceptionIsThrownWhenNumberIsValid($number, $birthDate, $gender)
+    public function testNoExceptionIsThrownWhenNumberIsValid(string $number, string $birthDate, int $gender)
     {
         try {
             Pesel::create($number);
@@ -46,9 +50,9 @@ class PeselTest extends PHPUnit_Framework_TestCase
      * @dataProvider validNumberDataProvider
      * @param string $number
      * @param string $birthDate
-     * @param int $gender
+     * @param int    $gender
      */
-    public function testIsValidReturnsTrueWhenNumberIsValid($number, $birthDate, $gender)
+    public function testIsValidReturnsTrueWhenNumberIsValid(string $number, string $birthDate, int $gender)
     {
         $actual = Pesel::isValid($number);
 
@@ -59,9 +63,9 @@ class PeselTest extends PHPUnit_Framework_TestCase
      * @dataProvider validNumberDataProvider
      * @param string $number
      * @param string $birthDate
-     * @param int $gender
+     * @param int    $gender
      */
-    public function testGetBirthDateReturnsCorrectDate($number, $birthDate, $gender)
+    public function testGetBirthDateReturnsCorrectDate(string $number, string $birthDate, int $gender)
     {
         $pesel = Pesel::create($number);
 
@@ -78,9 +82,9 @@ class PeselTest extends PHPUnit_Framework_TestCase
      * @dataProvider validNumberDataProvider
      * @param string $number
      * @param string $birthDate
-     * @param int $gender
+     * @param int    $gender
      */
-    public function testGetGenderReturnsCorrectGender($number, $birthDate, $gender)
+    public function testGetGenderReturnsCorrectGender(string $number, string $birthDate, int $gender)
     {
         $pesel = Pesel::create($number);
 
@@ -97,9 +101,9 @@ class PeselTest extends PHPUnit_Framework_TestCase
      * @dataProvider validNumberDataProvider
      * @param string $number
      * @param string $birthDate
-     * @param int $gender
+     * @param int    $gender
      */
-    public function testGetNumberReturnsCorrectNumber($number, $birthDate, $gender)
+    public function testGetNumberReturnsCorrectNumber(string $number, string $birthDate, int $gender)
     {
         $pesel = Pesel::create($number);
 
@@ -116,9 +120,9 @@ class PeselTest extends PHPUnit_Framework_TestCase
      * @dataProvider validNumberDataProvider
      * @param string $number
      * @param string $birthDate
-     * @param int $gender
+     * @param int    $gender
      */
-    public function testToStringReturnsCorrectNumber($number, $birthDate, $gender)
+    public function testToStringReturnsCorrectNumber(string $number, string $birthDate, int $gender)
     {
         $pesel = Pesel::create($number);
 
@@ -137,7 +141,8 @@ class PeselTest extends PHPUnit_Framework_TestCase
             'invalidLength' => 'invalidLength',
         ];
 
-        $this->setExpectedException('InvalidArgumentException', $errorMessages['invalidLength']);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($errorMessages['invalidLength']);
 
         new Pesel('1234', $errorMessages);
     }
@@ -148,7 +153,8 @@ class PeselTest extends PHPUnit_Framework_TestCase
             'invalidCharacters' => 'invalidCharacters',
         ];
 
-        $this->setExpectedException('InvalidArgumentException', $errorMessages['invalidCharacters']);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($errorMessages['invalidCharacters']);
 
         new Pesel('aaaabbbbccc', $errorMessages);
     }
@@ -159,7 +165,8 @@ class PeselTest extends PHPUnit_Framework_TestCase
             'invalidChecksum' => 'invalidChecksum',
         ];
 
-        $this->setExpectedException('InvalidArgumentException', $errorMessages['invalidChecksum']);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($errorMessages['invalidChecksum']);
 
         new Pesel('11111111111', $errorMessages);
     }
@@ -203,5 +210,4 @@ class PeselTest extends PHPUnit_Framework_TestCase
             ['50710100004', '2250-11-01', Pesel::GENDER_FEMALE],
         ];
     }
-
 }

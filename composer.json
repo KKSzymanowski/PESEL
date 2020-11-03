@@ -6,24 +6,26 @@
     "authors": [
         {
             "name": "Kuba Szymanowski",
-            "email": "kuba.szymanowski@inf24.pl"
+            "email": "kubaszymanowski@gmail.com"
         }
     ],
-
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=7.3.0"
     },
-
     "require-dev": {
-        "phpunit/phpunit": "~4.1",
-        "satooshi/php-coveralls": "1.*"
+        "phpunit/phpunit": "9.*",
+        "satooshi/php-coveralls": "2.*"
     },
-
     "autoload": {
         "psr-4": {
             "Pesel\\": "src/"
         }
     },
-
-    "minimum-stability": "dev"
+    "autoload-dev": {
+        "psr-4": {
+            "Pesel\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

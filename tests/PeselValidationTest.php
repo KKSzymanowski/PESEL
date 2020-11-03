@@ -1,18 +1,21 @@
 <?php
 
+namespace Pesel\Tests;
+
+use DateTime;
+use InvalidArgumentException;
 use Pesel\Pesel;
-use Pesel\PeselValidator;
+use PHPUnit\Framework\TestCase;
 
-class PeselValidationTest extends PHPUnit_Framework_TestCase
+class PeselValidationTest extends TestCase
 {
-
     /**
      * @dataProvider birthDateDataProvider
-     * @param Pesel $pesel
+     * @param Pesel  $pesel
      * @param string $birthDate
-     * @param bool $isCorrect
+     * @param bool   $isCorrect
      */
-    public function testHasBirthDateReturnsCorrectValue(Pesel $pesel, $birthDate, $isCorrect)
+    public function testHasBirthDateReturnsCorrectValue(Pesel $pesel, string $birthDate, bool $isCorrect)
     {
         $actual = $pesel->hasBirthDate(DateTime::createFromFormat('Y-m-d', $birthDate));
 
@@ -29,10 +32,10 @@ class PeselValidationTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider genderDataProvider
      * @param Pesel $pesel
-     * @param int $gender
-     * @param bool $isCorrect
+     * @param int   $gender
+     * @param bool  $isCorrect
      */
-    public function testHasGenderReturnsCorrectValue(Pesel $pesel, $gender, $isCorrect)
+    public function testHasGenderReturnsCorrectValue(Pesel $pesel, int $gender, bool $isCorrect)
     {
         $actual = $pesel->hasGender($gender);
 
@@ -47,17 +50,25 @@ class PeselValidationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider genderInputsDataProvider
+     * @dataProvider validGenderInputsDataProvider
+     * @doesNotPerformAssertions
      * @param mixed $gender
-     * @param bool $isValid
      */
-    public function testHasGenderThrowsExceptionWhenGenderInputIsInvalid($gender, $isValid)
+    public function testHasGenderDoesNotThrowExceptionWhenGenderInputIsValid($gender)
+    {
+        (new Pesel("00010100008"))->hasGender($gender);
+    }
+
+    /**
+     * @dataProvider invalidGenderInputsDataProvider
+     * @param mixed $gender
+     */
+    public function testHasGenderThrowsExceptionWhenGenderInputIsInvalid($gender)
     {
         $pesel = new Pesel("00010100008");
 
-        if ($isValid == false) {
-            $this->setExpectedException('InvalidArgumentException', 'Podano płeć w niepoprawnym formacie');
-        }
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Podano płeć w niepoprawnym formacie');
 
         $pesel->hasGender($gender);
     }
@@ -116,24 +127,29 @@ class PeselValidationTest extends PHPUnit_Framework_TestCase
         ];
     }
 
-    public function genderInputsDataProvider()
+    public function validGenderInputsDataProvider()
     {
         return [
-            ['M', false],
-            ['m', false],
-            ['F', false],
-            ['f', false],
-            ['K', false],
-            ['k', false],
-            ['W', false],
-            ['w', false],
-            [Pesel::GENDER_MALE, true],
-            [Pesel::GENDER_FEMALE, true],
-            [0, true],
-            [1, true],
-            ['0', true],
-            ['1', true],
+            [Pesel::GENDER_MALE],
+            [Pesel::GENDER_FEMALE],
+            [0],
+            [1],
+            ['0'],
+            ['1'],
         ];
     }
 
+    public function invalidGenderInputsDataProvider()
+    {
+        return [
+            ['M'],
+            ['m'],
+            ['F'],
+            ['f'],
+            ['K'],
+            ['k'],
+            ['W'],
+            ['w'],
+        ];
+    }
 }
