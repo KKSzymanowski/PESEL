@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * KKSzymanowski/PESEL
  * Walidacja numeru PESEL
@@ -13,9 +15,11 @@
 namespace Pesel;
 
 use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use InvalidArgumentException;
 
-class Pesel
+final class Pesel
 {
     const GENDER_FEMALE = 0;
 
@@ -55,11 +59,9 @@ class Pesel
     protected static $weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1];
 
     /**
-     * @param string $number
-     * @param array $errorMessages
      * @throws InvalidArgumentException when PESEL number is invalid.
      */
-    public function __construct($number, $errorMessages = [])
+    public function __construct(string $number, array $errorMessages = [])
     {
         $this->errorMessages = array_merge($this->errorMessages, $errorMessages);
 
@@ -75,11 +77,10 @@ class Pesel
     /**
      * A glorified constructor.
      *
-     * @param string $number
      * @return static
      * @throws InvalidArgumentException when PESEL number is invalid.
      */
-    public static function create($number)
+    public static function create(string $number)
     {
         return new static($number);
     }
@@ -88,9 +89,8 @@ class Pesel
      * Check if provided number is valid.
      *
      * @param string $number
-     * @return bool
      */
-    public static function isValid($number)
+    public static function isValid(string $number): bool
     {
         try {
             new static($number);
@@ -101,20 +101,15 @@ class Pesel
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->number;
     }
 
     /**
      * Get birth date encoded in the number.
-     *
-     * @return DateTime
      */
-    public function getBirthDate()
+    public function getBirthDate(): DateTimeImmutable
     {
         $year = substr($this->number, 0, 2);
         $month = substr($this->number, 2, 2);
@@ -133,28 +128,23 @@ class Pesel
 
         $year = $century.$year;
 
-        $month = str_pad($month % 20, 2, '0', STR_PAD_LEFT);
+        $month = str_pad((string) ($month % 20), 2, '0', STR_PAD_LEFT);
 
-        return DateTime::createFromFormat('Y-m-d', "$year-$month-$day");
+        return DateTimeImmutable::createFromFormat('Y-m-d', "$year-$month-$day");
     }
 
     /**
      * Check if PESEL number contains provided birth date.
-     *
-     * @param DateTime $birthDate
-     * @return bool
      */
-    public function hasBirthDate(DateTime $birthDate)
+    public function hasBirthDate(DateTimeInterface $birthDate): bool
     {
         return $this->getBirthDate() == $birthDate;
     }
 
     /**
      * Get gender encoded in the number.
-     *
-     * @return int
      */
-    public function getGender()
+    public function getGender(): int
     {
         return $this->number[static::$genderDigit] % 2;
     }
@@ -163,22 +153,16 @@ class Pesel
      * Check if PESEL number contains provided gender.
      *
      * @param int $gender Pesel::GENDER_FEMALE or Pesel::GENDER_MALE
-     * @return bool
      * @throws InvalidArgumentException when provided gender is neither Pesel::GENDER_FEMALE nor PESEL::GENDER_MALE
      */
-    public function hasGender($gender)
+    public function hasGender(int $gender): bool
     {
         static::validateGenderInput($gender);
 
         return $this->getGender() == $gender;
     }
 
-    /**
-     * String representation.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->number;
     }
@@ -186,7 +170,7 @@ class Pesel
     /**
      * @throws InvalidArgumentException when number has invalid length
      */
-    protected function validateLength()
+    protected function validateLength(): void
     {
         if (strlen($this->number) !== self::$peselLength) {
             throw new InvalidArgumentException($this->errorMessages['invalidLength']);
@@ -196,7 +180,7 @@ class Pesel
     /**
      * @throws InvalidArgumentException when number contains non-digits
      */
-    protected function validateDigitsOnly()
+    protected function validateDigitsOnly(): void
     {
         if (ctype_digit($this->number) === false) {
             throw new InvalidArgumentException($this->errorMessages['invalidCharacters']);
@@ -206,7 +190,7 @@ class Pesel
     /**
      * @throws InvalidArgumentException on invalid checksum
      */
-    protected function validateChecksum()
+    protected function validateChecksum(): void
     {
         $digitArray = str_split($this->number);
 
@@ -225,13 +209,9 @@ class Pesel
      * @param int $gender Pesel::GENDER_FEMALE or Pesel::GENDER_MALE
      * @throws InvalidArgumentException when provided gender is not Pesel::GENDER_FEMALE nor PESEL::GENDER_MALE
      */
-    protected static function validateGenderInput($gender)
+    protected static function validateGenderInput(int $gender): void
     {
-        if ($gender !== static::GENDER_FEMALE &&
-            $gender !== static::GENDER_MALE &&
-            $gender !== (string) self::GENDER_FEMALE &&
-            $gender !== (string) self::GENDER_MALE
-        ) {
+        if ($gender !== static::GENDER_FEMALE && $gender !== static::GENDER_MALE) {
             throw new InvalidArgumentException('Podano płeć w niepoprawnym formacie');
         }
     }

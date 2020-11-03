@@ -13,9 +13,9 @@
             <directory suffix=".php">./tests</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist processUncoveredFiles="true">
+    <coverage processUncoveredFiles="true">
+        <include>
             <directory>src</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </coverage>
 </phpunit>
