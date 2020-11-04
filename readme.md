@@ -14,6 +14,18 @@ Paczka do łatwej walidacji numeru **PESEL**.
 composer require kkszymanowski/pesel
 ```
 
+### Upgrade guide
+#### 2.* -> 3.*
+Wersja 3 jest wstecznie kompatybilna z wersją 2 ale wymaga PHP >=7.3.
+Poza podniesieniem wersji PHP żadne zmiany nie są konieczne.
+
+Zalecana jest natomiast zmiana łapanego wyjątku `InvalidArgumentException` na wyjątki odpowiadające konkretnym błędom walidacji:
+- `Pesel\Exceptions\InvalidLengthException` - Błędna długość
+- `Pesel\Exceptions\InvalidCharactersException` - Znaki inne niż cyfry
+- `Pesel\Exceptions\InvalidChecksumException` - Błędna suma kontrolna
+
+lub po prostu na `Pesel\Exceptions\PeselValidationException` aby złapać wszystkie błędy walidacji.
+
 ### Użycie
 ##### Tworzenie obiektu
 ```php
@@ -30,33 +42,35 @@ Podczas tworzenia obiektu sprawdzana jest poprawność numeru PESEL.
 - Powinien zawierać wyłącznie cyfry
 - Suma kontrolna powinna być poprawna.
 
-Jeżeli przynajmniej jeden z tych warunków nie zostanie spełniony, zostanie rzucony wyjątek typu `InvalidArgumentException` z domyślną treścią. Treść wyjątku można nadpisać następująco:
-```php
-Pesel::create($number, [
-    'invalidLength'     => 'Tekst 1',
-    'invalidCharacters' => 'Tekst 2',
-    'invalidChecksum'   => 'Tekst 3'
-]);
-```
-Pozwala to na elastyczne przekazanie treści do użytkownika:
+Jeżeli przynajmniej jeden z tych warunków nie zostanie spełniony, zostanie rzucony odpowiedni wyjątek:
+- `Pesel\Exceptions\InvalidLengthException` - Błędna długość
+- `Pesel\Exceptions\InvalidCharactersException` - Znaki inne niż cyfry
+- `Pesel\Exceptions\InvalidChecksumException` - Błędna suma kontrolna
+
 ```php
 try {
-    Pesel::create($number, [
-       'invalidLength'     => 'Tekst 1',
-       'invalidCharacters' => 'Tekst 2',
-       'invalidChecksum'   => 'Tekst 3'
-    ]);
+    Pesel::create($number);
 
-    echo("Numer PESEL jest poprawny");
-} catch(InvalidArgumentException $e) {
-    echo($e->getMessage());
+    echo('Numer PESEL jest poprawny');
+} catch(Pesel\Exceptions\InvalidLengthException $e) {
+    echo('Numer PESEL ma nieprawidłową długość');
+} catch(Pesel\Exceptions\InvalidCharactersException $e) {
+    echo('Numer PESEL zawiera nieprawidłowe znaki');
+} catch(Pesel\Exceptions\InvalidChecksumException $e) {
+    echo('Numer PESEL zawiera błędną sumę kontrolną');
 }
 ```
-Brak któregokolwiek z wymienionych pól skutkuje rzuceniem wyjątku z domyślną treścią:
+
+Wszystkie powyższe wyjątki dziedziczą z `Pesel\Exceptions\PeselValidationException` więc jeżeli niepotrzebne jest 
+rozróżnienie na konkretne błędy walidacji można zastosować jedną klauzulę `catch`:
 ```php
-'invalidLength'     => 'Nieprawidłowa długość numeru PESEL.',
-'invalidCharacters' => 'Numer PESEL może zawierać tylko cyfry.',
-'invalidChecksum'   => 'Numer PESEL posiada niepoprawną sumę kontrolną.'
+try {
+    Pesel::create($number);
+
+    echo('Numer PESEL jest poprawny');
+} catch(\Pesel\Exceptions\PeselValidationException $e) {
+    echo('Numer PESEL jest błędny');
+}
 ```
 ##### Pobieranie zawartości numeru PESEL:
 ```php
