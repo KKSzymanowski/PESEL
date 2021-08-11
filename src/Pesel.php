@@ -147,7 +147,7 @@ class Pesel
 
         $month = str_pad($month % 20, 2, '0', STR_PAD_LEFT);
 
-        return DateTime::createFromFormat('Y-m-d', "$year-$month-$day");
+        return DateTime::createFromFormat('Y-m-d H:i:s', "$year-$month-$day 00:00:00");
     }
 
     /**
