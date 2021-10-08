@@ -16,7 +16,7 @@ composer require kkszymanowski/pesel
 
 ### Upgrade guide
 #### 2.* -> 3.*
-Wersja 3 jest wstecznie kompatybilna z wersją 2 ale wymaga PHP >=7.3.
+Wersja 3 jest wstecznie kompatybilna z wersją 2, ale wymaga PHP >=7.3.
 Poza podniesieniem wersji PHP żadne zmiany nie są konieczne.
 
 Zalecana jest natomiast zmiana łapanego wyjątku `InvalidArgumentException` na wyjątki odpowiadające konkretnym błędom walidacji:
@@ -25,6 +25,12 @@ Zalecana jest natomiast zmiana łapanego wyjątku `InvalidArgumentException` na 
 - `Pesel\Exceptions\InvalidChecksumException` - Błędna suma kontrolna
 
 lub po prostu na `Pesel\Exceptions\PeselValidationException` aby złapać wszystkie błędy walidacji.
+
+#### 3.* -> 4.*
+W wersji 4 zmieniona została walidacja numeru PESEL, aby dobrze identyfikować numery takie jak `00000000000` i `44444444444` jako niepoprawne.
+Wersja 4 jest zatem niekompatybilna z wersją 3 w tych przypadkach brzegowych, ale nie powinno być problemów z kompatybilnością w większości przypadków.
+
+Od wersji 4 w przypadku nieprawidłowej daty urodzenia w numerze PESEL rzucany jest nowy wyjątek - `Pesel\Exceptions\InvalidBirthDateException`.
 
 ### Użycie
 ##### Tworzenie obiektu
@@ -38,14 +44,19 @@ $pesel = Pesel::create($number);
 **Powyższe metody są równoważne.**
 
 Podczas tworzenia obiektu sprawdzana jest poprawność numeru PESEL.
-- Powinien mieć 11 znaków
-- Powinien zawierać wyłącznie cyfry
+- Powinien mieć 11 znaków.
+- Powinien zawierać wyłącznie cyfry.
 - Suma kontrolna powinna być poprawna.
-
+- Powinien zawierać prawidłową datę urodzenia:
+    - rok >= 1800 i < 2300.
+    - miesiąc >= 1 i <= 12.
+    - dzień >= 1 i nie większy niż liczba dni w danym miesiącu i danym roku.
+    
 Jeżeli przynajmniej jeden z tych warunków nie zostanie spełniony, zostanie rzucony odpowiedni wyjątek:
 - `Pesel\Exceptions\InvalidLengthException` - Błędna długość
 - `Pesel\Exceptions\InvalidCharactersException` - Znaki inne niż cyfry
 - `Pesel\Exceptions\InvalidChecksumException` - Błędna suma kontrolna
+- `Pesel\Exceptions\InvalidChecksumException` - Błędna data urodzenia
 
 ```php
 try {
@@ -58,6 +69,8 @@ try {
     echo('Numer PESEL zawiera nieprawidłowe znaki');
 } catch(Pesel\Exceptions\InvalidChecksumException $e) {
     echo('Numer PESEL zawiera błędną sumę kontrolną');
+} catch(Pesel\Exceptions\InvalidBirthDateException $e) {
+    echo('Numer PESEL zawiera nieprawdiłową datę urodzenia');
 }
 ```
 
