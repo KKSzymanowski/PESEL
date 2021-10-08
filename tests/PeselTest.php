@@ -179,6 +179,18 @@ class PeselTest extends TestCase
         new Pesel('11111111111', $errorMessages);
     }
 
+    public function testCustomInvalidBirthDateMessage()
+    {
+        $errorMessages = [
+            'invalidBirthDate' => 'invalidBirthDate',
+        ];
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($errorMessages['invalidBirthDate']);
+
+        new Pesel('44444444444', $errorMessages);
+    }
+
     public function invalidNumberDataProvider()
     {
         return [
@@ -190,6 +202,8 @@ class PeselTest extends TestCase
             ['96100612532'],
             ['61122500187'],
             ['78091501150'],
+            ['00000000000'],
+            ['44444444444'],
         ];
     }
 
