@@ -159,7 +159,7 @@ class Pesel
      */
     public function hasBirthDate(DateTime $birthDate)
     {
-        return $this->getBirthDate() == $birthDate;
+        return $this->getBirthDate() == (clone $birthDate)->setTime(0, 0, 0);
     }
 
     /**
