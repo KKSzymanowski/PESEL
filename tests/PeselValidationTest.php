@@ -26,7 +26,7 @@ class PeselValidationTest extends TestCase
         $this->assertEquals(
             $isCorrect,
             $actual,
-            "Invalid gender. Got $actualStr, expected $isCorrectStr for number $pesel"
+            "Invalid birth date. Got $actualStr, expected $isCorrectStr for number $pesel"
         );
     }
 
