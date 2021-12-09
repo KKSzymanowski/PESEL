@@ -2,6 +2,6 @@
 
 namespace Pesel\Exceptions;
 
-class InvalidChecksumException extends PeselValidationException
+class InvalidChecksumException extends ValidationException
 {
 }

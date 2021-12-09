@@ -2,6 +2,6 @@
 
 namespace Pesel\Exceptions;
 
-class InvalidBirthDateException extends PeselValidationException
+class InvalidBirthDateException extends ValidationException
 {
 }

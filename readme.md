@@ -76,12 +76,13 @@ try {
 
 Wszystkie powyższe wyjątki dziedziczą z `Pesel\Exceptions\PeselValidationException` więc jeżeli niepotrzebne jest 
 rozróżnienie na konkretne błędy walidacji można zastosować jedną klauzulę `catch`:
+
 ```php
 try {
     Pesel::create($number);
 
     echo('Numer PESEL jest poprawny');
-} catch(\Pesel\Exceptions\PeselValidationException $e) {
+} catch(\Pesel\Exceptions\ValidationException $e) {
     echo('Numer PESEL jest błędny');
 }
 ```

@@ -119,7 +119,7 @@ class PeselTest extends TestCase
         $this->assertEquals(
             $number,
             $actual,
-            "Invalid gender. Got $actual, expected $number for number $number"
+            "Invalid number from getNumber(). Got $actual, expected $number for number $number"
         );
     }
 
@@ -139,7 +139,7 @@ class PeselTest extends TestCase
         $this->assertEquals(
             $number,
             $actual,
-            "Invalid gender. Got $actual, expected $number for number $number"
+            "Invalid __toString(). Got $actual, expected $number for number $number"
         );
     }
 

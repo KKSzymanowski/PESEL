@@ -2,6 +2,6 @@
 
 namespace Pesel\Exceptions;
 
-class InvalidLengthException extends PeselValidationException
+class InvalidLengthException extends ValidationException
 {
 }

@@ -2,6 +2,6 @@
 
 namespace Pesel\Exceptions;
 
-class InvalidCharactersException extends PeselValidationException
+class InvalidCharactersException extends ValidationException
 {
 }
